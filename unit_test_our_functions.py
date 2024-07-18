@@ -49,7 +49,7 @@ class test_is_valid_date(unittest.TestCase):
         self.assertEqual(res,False)
 
     def test_exception(self):
-        date_str = "111111a111"
+        date_str = "aaaaaaaaaa"
         res = our_functions.is_valid_date(date_str)
         self.assertEqual(res,False)
 
@@ -67,8 +67,45 @@ class test_is_valid_username(unittest.TestCase):
         res = our_functions.is_valid_username(username_str, min_username_chars)
         self.assertEqual(res, True)
 
+    def test_minlen_below_1(self):
+        username_str = ""
+        min_username_chars = 0  
+        with self.assertRaises(ValueError) as context:
+            our_functions.is_valid_username(username_str, min_username_chars)
+        self.assertEqual(str(context.exception), "minlen must be at least 1")
+
+    def test_name_minlen(self):
+        username_str = "dream"
+        min_username_chars = 6
+        res = our_functions.is_valid_username(username_str, min_username_chars)
+        self.assertEqual(res, False)
+    
+    def test_not_match(self):
+        username_str = "dr@am"
+        min_username_chars = 5
+        res = our_functions.is_valid_username(username_str, min_username_chars)
+        self.assertEqual(res, False)
+
+    def test_not_str(self):
+        username_str = "1dsed"
+        min_username_chars = 5
+        res = our_functions.is_valid_username(username_str, min_username_chars)
+        self.assertEqual(res, False)
+    
+    # def test_not_string(self):
+    #     username_str = 11234
+    #     min_username_chars = 5
+    #     res = our_functions.is_valid_username(username_str, min_username_chars)
+    #     self.assertEqual(res, False)
 
     
+    def test_not_string(self):
+        username_not_str = 11234  # ไม่ใช่สตริง จะทำให้เกิด TypeError
+        min_username_chars = 5
+        with self.assertRaises(TypeError) as context:
+            our_functions.is_valid_username(username_not_str, min_username_chars)
+        self.assertEqual(str(context.exception), "username must be a string")
+
 
 
 if __name__ == "__main__":
